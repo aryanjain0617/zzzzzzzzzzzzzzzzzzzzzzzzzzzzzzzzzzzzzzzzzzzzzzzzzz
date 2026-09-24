@@ -1,0 +1,2468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym SOP Library</title>
+  <style>
+    :root {
+      --navy-900: #0b1f3a;
+      --navy-800: #102a4c;
+      --navy-700: #16345e;
+      --blue-600: #1d6fd8;
+      --blue-500: #2f7fe6;
+      --blue-100: #e7f1fd;
+      --blue-050: #f3f8fe;
+      --amber-100: #fff4e0;
+      --amber-400: #e08a1e;
+      --green-700: #1f7a4d;
+      --ink-900: #12213b;
+      --ink-700: #33425c;
+      --ink-500: #5c6b85;
+      --line: #d8e0ee;
+      --paper: #ffffff;
+      --bg: #eef2f8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--ink-900);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---------- Top App Nav ---------- */
+    .app-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--navy-900);
+      border-bottom: 3px solid var(--blue-600);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 20px;
+      overflow-x: auto;
+    }
+
+    .app-nav .brand {
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: .2px;
+      padding: 16px 18px 16px 0;
+      white-space: nowrap;
+      border-right: 1px solid rgba(255, 255, 255, .15);
+      margin-right: 6px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: #b9c8e6;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 16px 16px;
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -3px;
+      transition: color .15s ease, border-color .15s ease;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+    }
+
+    .tab-btn.active {
+      color: #fff;
+      border-bottom: 3px solid var(--blue-500);
+    }
+
+    /* ---------- Page / doc shell ---------- */
+    .doc {
+      display: none;
+      max-width: 920px;
+      margin: 28px auto 80px;
+      padding: 0 16px;
+    }
+
+    .doc.active {
+      display: block;
+    }
+
+    .doc-header {
+      background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
+      color: #fff;
+      border-radius: 10px;
+      padding: 26px 28px 22px;
+      box-shadow: 0 6px 18px rgba(11, 31, 58, .18);
+    }
+
+    .doc-header .eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--blue-500);
+      background: rgba(47, 127, 230, .15);
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+
+    .doc-header h1 {
+      margin: 0 0 4px;
+      font-size: 26px;
+      line-height: 1.25;
+    }
+
+    .doc-header .subtitle {
+      margin: 0 0 20px;
+      font-size: 15px;
+      color: #c7d5ec;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 8px;
+      padding: 14px 18px;
+    }
+
+    .meta-grid .m-label {
+      font-size: 10.5px;
+      letter-spacing: .4px;
+      color: #93a6c8;
+      margin-bottom: 4px;
+    }
+
+    .meta-grid .m-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    /* ---------- Section blocks ---------- */
+    .section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      margin-top: 18px;
+      padding: 20px 24px 24px;
+      box-shadow: 0 1px 3px rgba(16, 42, 76, .05);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--blue-600);
+    }
+
+    .section-title .num {
+      background: var(--blue-600);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 16.5px;
+      color: var(--navy-900);
+      letter-spacing: .2px;
+    }
+
+    .section p {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--ink-700);
+      margin: 0 0 10px;
+    }
+
+    .section ul {
+      margin: 0 0 6px;
+      padding-left: 20px;
+    }
+
+    .section ul li {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--ink-700);
+      margin-bottom: 4px;
+    }
+
+    .section ul li strong {
+      color: var(--ink-900);
+    }
+
+    /* ---------- Data table ---------- */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+
+    table.data {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      min-width: 560px;
+    }
+
+    table.data thead th {
+      background: var(--navy-900);
+      color: #fff;
+      text-align: left;
+      padding: 10px 14px;
+      font-weight: 600;
+      font-size: 12.5px;
+    }
+
+    table.data tbody td {
+      padding: 9px 14px;
+      border-top: 1px solid var(--line);
+      color: var(--ink-700);
+    }
+
+    table.data tbody tr:nth-child(even) {
+      background: var(--blue-050);
+    }
+
+    table.data tbody tr:hover {
+      background: var(--blue-100);
+    }
+
+    table.data td.num-cell {
+      font-weight: 700;
+      color: var(--blue-600);
+      width: 34px;
+    }
+
+    table.data td.name-cell {
+      font-weight: 600;
+      color: var(--navy-900);
+    }
+
+    table.data tr.highlight td {
+      color: var(--green-700);
+      font-weight: 700;
+    }
+
+    /* ---------- Exercise / stretch cards ---------- */
+    .card-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .ex-card {
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 16px 18px 18px;
+      background: var(--paper);
+    }
+
+    .ex-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .ex-card-top h3 {
+      margin: 0;
+      font-size: 15.5px;
+      color: var(--navy-900);
+    }
+
+    .pill {
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .ex-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 18px;
+      font-size: 12.5px;
+      color: var(--ink-500);
+      margin-bottom: 10px;
+    }
+
+    .ex-meta b {
+      color: var(--ink-700);
+      font-weight: 600;
+    }
+
+    .steps {
+      margin: 0 0 10px;
+      padding-left: 0;
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .steps li {
+      counter-increment: step;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--ink-700);
+      padding-left: 26px;
+      position: relative;
+      margin-bottom: 5px;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 1px;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: var(--blue-100);
+      color: var(--blue-600);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rx-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .rx-chip {
+      background: var(--blue-050);
+      border: 1px solid var(--blue-100);
+      color: var(--navy-800);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    .rx-chip span {
+      color: var(--blue-600);
+      font-weight: 700;
+    }
+
+    .tip {
+      display: flex;
+      gap: 9px;
+      background: var(--amber-100);
+      border-left: 3px solid var(--amber-400);
+      border-radius: 0 6px 6px 0;
+      padding: 9px 12px;
+      font-size: 13px;
+      color: #7a4f0c;
+      line-height: 1.5;
+    }
+
+    .tip b {
+      color: #5c3a08;
+    }
+
+    footer.doc-footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--ink-500);
+      margin-top: 26px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width:640px) {
+      .meta-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .section {
+        padding: 16px;
+      }
+
+      .doc-header {
+        padding: 20px;
+      }
+    }
+
+    /* ---------- Reviews tab: status buttons + sync box ---------- */
+    .status-btn-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn-status {
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #f0f4f8;
+      color: var(--ink-700);
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .btn-status:hover {
+      opacity: .85;
+    }
+
+    .btn-status.active-done {
+      background: #1f7a4d;
+      color: #fff;
+      border-color: #1f7a4d;
+    }
+
+    .btn-status.active-pending {
+      background: #e08a1e;
+      color: #fff;
+      border-color: #e08a1e;
+    }
+
+    .btn-status.active-notdone {
+      background: #c62f2f;
+      color: #fff;
+      border-color: #c62f2f;
+    }
+
+    .sync-box {
+      background: var(--blue-050);
+      border: 1px solid var(--blue-100);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .sync-box input {
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--line);
+      font-size: 12px;
+      margin-right: 8px;
+      margin-bottom: 6px;
+    }
+
+    .sync-note {
+      font-size: 11.5px;
+      color: #a9660c;
+      background: var(--amber-100);
+      border-left: 3px solid var(--amber-400);
+      border-radius: 0 6px 6px 0;
+      padding: 8px 10px;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    table.data td.num-cell {
+      font-weight: 700;
+      color: var(--blue-600);
+      width: 34px;
+    }
+
+    table.data td.name-cell {
+      font-weight: 600;
+      color: var(--navy-900);
+    }
+
+    /* ---------- Diet checklist tab ---------- */
+    .diet-week-label {
+      font-weight: 700;
+      color: var(--navy-900);
+      font-size: 13px;
+      margin: 0 0 8px;
+    }
+
+    table.diet-grid {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+
+    table.diet-grid thead th {
+      background: var(--navy-900);
+      color: #fff;
+      text-align: center;
+      padding: 8px 6px;
+      font-weight: 600;
+      font-size: 11.5px;
+    }
+
+    table.diet-grid thead th:first-child {
+      text-align: left;
+      padding-left: 12px;
+    }
+
+    table.diet-grid tbody td {
+      padding: 8px 6px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    table.diet-grid tbody tr:nth-child(even) {
+      background: var(--blue-050);
+    }
+
+    table.diet-grid td.meal-cell {
+      text-align: left;
+      padding-left: 12px;
+    }
+
+    table.diet-grid td.meal-cell .meal-num {
+      font-weight: 700;
+      color: var(--navy-900);
+      display: block;
+      font-size: 12.5px;
+    }
+
+    table.diet-grid td.meal-cell .meal-name {
+      color: var(--ink-500);
+      font-size: 11px;
+    }
+
+    .chk-box {
+      appearance: none;
+      -webkit-appearance: none;
+      display: inline-block;
+      width: 17px;
+      height: 17px;
+      border: 1.4px solid var(--navy-900);
+      border-radius: 3px;
+      background: #fff;
+      cursor: pointer;
+      position: relative;
+      vertical-align: middle;
+      margin: 0;
+    }
+
+    .chk-box:checked {
+      background: var(--green-700);
+      border-color: var(--green-700);
+    }
+
+    .chk-box:checked::after {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 1px;
+      width: 5px;
+      height: 9px;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .chk-box:focus-visible {
+      outline: 2px solid var(--blue-600);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="app-nav">
+    <div class="brand">SOP Library</div>
+    <button class="tab-btn active" data-doc="warmup">Dynamic Warm-Up</button>
+    <button class="tab-btn" data-doc="workout">Full-Body Cable Workout</button>
+    <button class="tab-btn" data-doc="cooldown">Static Cool-Down</button>
+    <button class="tab-btn" data-doc="tracker">Workout Tracker</button>
+    <button class="tab-btn" data-doc="reviews">Daily Monthly Reviews</button>
+    <button class="tab-btn" data-doc="diet">Diet Checklist</button>
+  </nav>
+
+  <!-- ============ DOC 1 : WARM-UP ============ -->
+  <main class="doc active" id="doc-warmup">
+    <div class="doc-header">
+      <span class="eyebrow">Standard Operating Procedure</span>
+      <h1>Dynamic Warm-Up &amp; Stretching Routine</h1>
+      <p class="subtitle">Pre-Workout Mobility Guide — Full-Body Preparation Before Cable Machine Training</p>
+      <div class="meta-grid">
+        <div>
+          <div class="m-label">DOCUMENT NO.</div>
+          <div class="m-value">SOP-GYM-WU-01</div>
+        </div>
+        <div>
+          <div class="m-label">EFFECTIVE DATE</div>
+          <div class="m-value">09-Sep-2026</div>
+        </div>
+        <div>
+          <div class="m-label">REVISION</div>
+          <div class="m-value">1.0</div>
+        </div>
+        <div>
+          <div class="m-label">APPLICABLE TO</div>
+          <div class="m-value">All Members / Trainers</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">1</div>
+        <h2>Purpose</h2>
+      </div>
+      <p>This SOP defines the standard warm-up and dynamic stretching routine to be completed before the Full-Body Cable
+        Machine Workout (SOP-GYM-CBL-01). A proper warm-up raises core body temperature, increases blood flow to working
+        muscles, lubricates joints, and activates the nervous system — reducing injury risk and improving performance on
+        the main lifts.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">2</div>
+        <h2>Warm-Up Structure</h2>
+      </div>
+      <p>The routine has two phases performed in order: <strong>Phase A — General Pulse Raiser</strong> (light cardio to
+        raise heart rate) followed by <strong>Phase B — Dynamic Stretches</strong> (active, moving stretches that
+        mobilise the specific joints and muscles used in the cable workout). Do NOT perform long-hold static stretches
+        before lifting — save those for the cool-down.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">3</div>
+        <h2>General Guidelines</h2>
+      </div>
+      <ul>
+        <li>Total warm-up time: approximately <strong>10–12 minutes</strong> before every session.</li>
+        <li>Move through a full, comfortable range of motion — never force or bounce into a stretch.</li>
+        <li>Keep dynamic stretches flowing and continuous, not held for long periods.</li>
+        <li>Increase range of motion gradually across the reps of each movement.</li>
+        <li>Stop and inform a trainer if you feel any sharp pain, dizziness, or instability.</li>
+        <li>Static stretching (long holds) belongs in the <strong>COOL-DOWN</strong>, after training — see the Cool-Down
+          SOP.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">4</div>
+        <h2>Routine Order</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="data" id="warmup-order-table"></table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">5</div>
+        <h2>Phase A — General Pulse Raiser</h2>
+      </div>
+      <div class="card-grid" id="warmup-phaseA"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">6</div>
+        <h2>Phase B — Dynamic Stretches (in order)</h2>
+      </div>
+      <div class="card-grid" id="warmup-phaseB"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">7</div>
+        <h2>Post-Workout Cool-Down (Static Stretching)</h2>
+      </div>
+      <p>After completing the cable workout, perform 5–8 minutes of static stretching — holding each stretch (chest,
+        lats, biceps/triceps, hip flexors, hamstrings, quads, calves) for 20–30 seconds without bouncing. Static
+        stretching is most effective and safest when muscles are already warm, i.e. AFTER training rather than before.
+      </p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">8</div>
+        <h2>Notes</h2>
+      </div>
+      <p>Diagrams are simplified schematic references indicating the primary area mobilised by each movement; they are
+        not anatomical or medical illustrations. Consult a certified trainer for personalized guidance, especially if
+        recovering from a joint or muscle injury.</p>
+    </div>
+
+    <footer class="doc-footer">SOP-GYM-WU-01 · Dynamic Warm-Up &amp; Stretching Routine</footer>
+  </main>
+
+  <!-- ============ DOC 2 : WORKOUT ============ -->
+  <main class="doc" id="doc-workout">
+    <div class="doc-header">
+      <span class="eyebrow">Standard Operating Procedure</span>
+      <h1>Full-Body Cable &amp; Home Workout Routine</h1>
+      <p class="subtitle">Setup, execution steps, biomechanical guidelines, and prescription standards for a complete
+        13-exercise full-body workout.</p>
+      <div class="meta-grid">
+        <div>
+          <div class="m-label">DOCUMENT NO.</div>
+          <div class="m-value">SOP-GYM-CBL-01</div>
+        </div>
+        <div>
+          <div class="m-label">EFFECTIVE DATE</div>
+          <div class="m-value">16-Sep-2026</div>
+        </div>
+        <div>
+          <div class="m-label">REVISION</div>
+          <div class="m-value">1.4</div>
+        </div>
+        <div>
+          <div class="m-label">APPLICABLE TO</div>
+          <div class="m-value">All Members / Home Workout Users</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">1</div>
+        <h2>Purpose</h2>
+      </div>
+      <p>This Standard Operating Procedure (SOP) outlines the standardized setup, execution steps, biomechanical
+        guidelines, and prescription standards for a complete 13-exercise full-body workout using home gym cable
+        stations, resistance bands, and chest fly machines.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">2</div>
+        <h2>General Safety Guidelines</h2>
+      </div>
+      <ul>
+        <li><strong>Mandatory Warm-Up:</strong> Complete 5–10 minutes of light dynamic movement before initiating loaded
+          exercises.</li>
+        <li><strong>Equipment Inspection:</strong> Verify carabiner locks, ankle strap buckles, cable integrity, and
+          weight stack pin insertion.</li>
+        <li><strong>Controlled Tempo:</strong> Perform reps at a controlled 2-second concentric (pushing/pulling) and
+          2-second eccentric (lowering) cadence.</li>
+        <li><strong>Respiratory Control:</strong> Exhale during exertion and inhale during the controlled return motion.
+        </li>
+        <li><strong>Joint Safety:</strong> Immediately terminate any exercise if acute joint or lumbar spinal sharp pain
+          is experienced.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">3</div>
+        <h2>Suggested Workout Order &amp; Summary</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="data" id="workout-order-table"></table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">4</div>
+        <h2>Exercise-by-Exercise Instructions</h2>
+      </div>
+      <div class="card-grid" id="workout-cards"></div>
+    </div>
+
+    <footer class="doc-footer">SOP-GYM-CBL-01 · Full-Body Workout Routine</footer>
+  </main>
+
+  <!-- ============ DOC 3 : COOL-DOWN ============ -->
+  <main class="doc" id="doc-cooldown">
+    <div class="doc-header">
+      <span class="eyebrow">Standard Operating Procedure</span>
+      <h1>Static Stretching — Cool-Down Routine</h1>
+      <p class="subtitle">Post-Workout Stretch Reference — One Stretch per Muscle Group</p>
+      <div class="meta-grid">
+        <div>
+          <div class="m-label">DOCUMENT NO.</div>
+          <div class="m-value">SOP-GYM-STR-01</div>
+        </div>
+        <div>
+          <div class="m-label">EFFECTIVE DATE</div>
+          <div class="m-value">09-Sep-2026</div>
+        </div>
+        <div>
+          <div class="m-label">REVISION</div>
+          <div class="m-value">1.0</div>
+        </div>
+        <div>
+          <div class="m-label">REFERENCES</div>
+          <div class="m-value">SOP-GYM-COMBO-01</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">1</div>
+        <h2>Purpose</h2>
+      </div>
+      <p>This SOP details every static cool-down stretch referenced in the Combined Warm-Up + Workout + Stretch Schedule
+        (SOP-GYM-COMBO-01). Static stretches are held (not bounced or moving) and are performed AFTER training, when
+        muscles are already warm — they improve flexibility, help reduce post-workout stiffness, and gradually return
+        the heart rate to normal.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">2</div>
+        <h2>General Guidelines</h2>
+      </div>
+      <ul>
+        <li>Perform static stretches only after your workout, once muscles are warm.</li>
+        <li>Ease into each stretch slowly until you feel gentle tension — never pain.</li>
+        <li>Do not bounce — hold each stretch still for the full duration.</li>
+        <li>Breathe normally and try to relax the muscle further with each exhale.</li>
+        <li>Hold each stretch for the time indicated (typically 20–30 seconds), and repeat on both sides where
+          applicable.</li>
+        <li>Stop immediately if you feel sharp, shooting, or joint pain.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">3</div>
+        <h2>Stretch Reference by Day</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="data" id="cooldown-order-table"></table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">4</div>
+        <h2>Stretch-by-Stretch Instructions</h2>
+      </div>
+      <div class="card-grid" id="cooldown-cards"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">5</div>
+        <h2>Notes</h2>
+      </div>
+      <p>Diagrams are simplified schematic references indicating the primary muscle group targeted by each stretch; they
+        are not anatomical or medical illustrations. If you have an existing injury or joint condition, consult a
+        certified trainer or physiotherapist before adding new stretches to your routine.</p>
+    </div>
+
+    <footer class="doc-footer">SOP-GYM-STR-01 · Static Stretching Cool-Down Routine</footer>
+  </main>
+
+  <!-- ============ DOC 4 : WORKOUT SCHEDULE (STATIC — HARD-CODED PRESCRIPTIONS) ============ -->
+  <main class="doc" id="doc-tracker">
+    <div class="doc-header">
+      <span class="eyebrow">Standard Operating Procedure</span>
+      <h1>Weekly Workout Schedule</h1>
+      <p class="subtitle">Combined Warm-Up + Workout + Stretch Schedule — fixed prescription, valid for this 3-month
+        cycle</p>
+      <div class="meta-grid">
+        <div>
+          <div class="m-label">DOCUMENT NO.</div>
+          <div class="m-value">SOP-GYM-COMBO-01</div>
+        </div>
+        <div>
+          <div class="m-label">EFFECTIVE DATE</div>
+          <div class="m-value">16-Sep-2026</div>
+        </div>
+        <div>
+          <div class="m-label">REVISION</div>
+          <div class="m-value">1.0</div>
+        </div>
+        <div>
+          <div class="m-label">CYCLE LENGTH</div>
+          <div class="m-value">3 Months</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">i</div>
+        <h2>Note</h2>
+      </div>
+      <p>These numbers are fixed for this training cycle — nothing here is editable, so there's nothing to type or save.
+        Warm-up is 2 sets × 10 reps, main workout is 4 sets × 12 reps at a fixed 1 kg, and every cool-down stretch is
+        held for 30 seconds across 2 sets. If your numbers change, just come back and ask for this page to be updated.
+      </p>
+    </div>
+
+    <!-- MONDAY — CHEST -->
+    <div class="section">
+      <div class="section-title">
+        <div class="num">1</div>
+        <h2>Monday — Chest</h2>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Dynamic Warm-Up</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Sets</th>
+              <th>Reps</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Arm Circles</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Inchworm to Shoulder Roll</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Main Workout</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Sets</th>
+              <th>Reps</th>
+              <th>Weight (kg)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Chest Fly (Pec Deck / Cable Chest Curl)</td>
+              <td>4</td>
+              <td>12</td>
+              <td>10 kg</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Reverse-Grip Seated Cable Pulldown (Upper Back)</td>
+              <td>3</td>
+              <td>12</td>
+              <td>10 kg</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Cool-Down Stretch</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Stretch</th>
+              <th>Sets</th>
+              <th>Hold Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Doorway/Cable Chest Stretch</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Cross-Body Shoulder Stretch</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TUESDAY — ABS &AMP; CORE -->
+    <div class="section">
+      <div class="section-title">
+        <div class="num">2</div>
+        <h2>Tuesday — Abs</h2>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Dynamic Warm-Up</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Sets</th>
+              <th>Reps</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Torso Twists</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Cat-Cow</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Main Workout</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Sets</th>
+              <th>Reps</th>
+              <th>Weight (kg)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Cable Crunch</td>
+              <td>4</td>
+              <td>12</td>
+              <td>10 kg</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Seated Cable Row (Lower Back)</td>
+              <td>3</td>
+              <td>12</td>
+              <td>12 kg</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Cool-Down Stretch</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Stretch</th>
+              <th>Sets</th>
+              <th>Hold Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Cobra Stretch</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Seated Torso Rotation Stretch</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+            <tr>
+              <td class="name-cell">child Pose (Lower Back)</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- WEDNESDAY — LEGS &AMP; BUTTOCKS (GLUTES) -->
+    <div class="section">
+      <div class="section-title">
+        <div class="num">3</div>
+        <h2>Wednesday — Legs & Buttocks (Glutes)</h2>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Dynamic Warm-Up</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Sets</th>
+              <th>Reps</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Leg Swings (Front-to-Back)</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Leg Swings (Side-to-Side)</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <td class="name-cell"> High Knees</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Butt Kicks</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Ankle Circles</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Main Workout</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Sets</th>
+              <th>Reps</th>
+              <th>Weight (kg)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Leg Extension</td>
+              <td>4</td>
+              <td>12</td>
+              <td>15 kg</td>
+            </tr>
+            <tr>
+              <td class="name-cell">bridge pose for Hamstring </td>
+              <td>4</td>
+              <td>1 minute hold</td>
+              <td>0 kg</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Seated Bench Squats</td>
+              <td>4</td>
+              <td>12</td>
+              <td>0 kg</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Seated aductors contraction</td>
+              <td>4</td>
+              <td>1 minute hold</td>
+              <td>0 kg</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Calf Raise</td>
+              <td>4</td>
+              <td>12</td>
+              <td>1 kg</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Cool-Down Stretch</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Stretch</th>
+              <th>Sets</th>
+              <th>Hold Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Standing Quad Stretch</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Toe Touch</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Glutes massage with form roller</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Calf Wall Stretch</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- THURSDAY — SHOULDERS -->
+    <div class="section">
+      <div class="section-title">
+        <div class="num">4</div>
+        <h2>Thursday — Shoulders</h2>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Dynamic Warm-Up</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Sets</th>
+              <th>Reps</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Arm Circles</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Torso Twists</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Main Workout</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Sets</th>
+              <th>Reps</th>
+              <th>Weight (kg)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Cable Lateral Raise</td>
+              <td>4</td>
+              <td>12</td>
+              <td>5 kg</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Cool-Down Stretch</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Stretch</th>
+              <th>Sets</th>
+              <th>Hold Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Cross-Body Shoulder Stretch</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Overhead Shoulder Stretch</td>
+              <td>2</td>
+              <td>10 Reps</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FRIDAY — ARMS (BICEPS, TRICEPS &AMP; FOREARMS) -->
+    <div class="section">
+      <div class="section-title">
+        <div class="num">5</div>
+        <h2>Friday — Arms (Biceps, Triceps & Forearms)</h2>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Dynamic Warm-Up</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Sets</th>
+              <th>Reps</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Arm Circles</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Inchworm to Shoulder Roll</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Main Workout</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Sets</th>
+              <th>Reps</th>
+              <th>Weight (kg)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Cable Bicep Curl</td>
+              <td>4</td>
+              <td>12</td>
+              <td>10 kg</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Cable Tricep Pushdown</td>
+              <td>4</td>
+              <td>12</td>
+              <td>10 kg</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Wrist Curl</td>
+              <td>4</td>
+              <td>12</td>
+              <td>4 kg</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Cool-Down Stretch</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Stretch</th>
+              <th>Sets</th>
+              <th>Hold Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Overhead Triceps Stretch</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Biceps Wall Stretch</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Wrist Flexor/Extensor Stretch</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SATURDAY — BACK -->
+    <div class="section">
+      <div class="section-title">
+        <div class="num">6</div>
+        <h2>Saturday — Back</h2>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Dynamic Warm-Up</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Sets</th>
+              <th>Reps</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Cat-Cow</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Torso Twists</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Main Workout</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Exercise</th>
+              <th>Sets</th>
+              <th>Reps</th>
+              <th>Weight (kg)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Seated Cable Row</td>
+              <td>4</td>
+              <td>12</td>
+              <td>16 kg</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Reverse-Grip Seated Cable Pulldown</td>
+              <td>4</td>
+              <td>12</td>
+              <td>15 kg</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:14px 0 6px;font-weight:700;color:var(--navy-900);font-size:12.5px;">Cool-Down Stretch</p>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Stretch</th>
+              <th>Sets</th>
+              <th>Hold Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name-cell">Child's Pose</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+            <tr>
+              <td class="name-cell">Dead Hanging</td>
+              <td>2</td>
+              <td>30 sec</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SUNDAY — REST -->
+    <div class="section">
+      <div class="section-title">
+        <div class="num">7</div>
+        <h2>Sunday — Rest Day</h2>
+      </div>
+      <p>No cable-machine training. Optional: 20–30 minute easy walk or light mobility work, or complete rest to allow
+        all muscle groups to recover.</p>
+    </div>
+
+    <footer class="doc-footer">SOP-GYM-COMBO-01 · Weekly Workout Schedule (fixed for this 3-month cycle)</footer>
+  </main>
+
+  <!-- ============ DOC 5 : DAILY MONTHLY REVIEWS ============ -->
+  <main class="doc" id="doc-reviews">
+    <div class="doc-header">
+      <span class="eyebrow">Monthly Tracking</span>
+      <h1>Daily Monthly Reviews</h1>
+      <p class="subtitle">7-Day Split — Warm-Up + Workout + Stretch Progress Log</p>
+      <div class="meta-grid">
+        <div>
+          <div class="m-label">START DATE</div>
+          <div class="m-value">14-Sep-2026</div>
+        </div>
+        <div>
+          <div class="m-label">TOTAL DAYS</div>
+          <div class="m-value">31 Days</div>
+        </div>
+        <div>
+          <div class="m-label">ADHERENCE RATE</div>
+          <div class="m-value" id="adherence-rate">0%</div>
+        </div>
+        <div>
+          <div class="m-label">SYNC STATUS</div>
+          <div class="m-value" id="sync-status">Local Only</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">⚙</div>
+        <h2>GitHub JSON Sync Settings (Cross-Device Sync)</h2>
+      </div>
+      <div class="sync-box">
+        <p style="margin-top:0;">To sync progress across devices via GitHub, enter your Personal Access Token (PAT) and
+          repo path, then click Save Config.</p>
+        <input type="password" id="gh-token" placeholder="GitHub Personal Access Token">
+        <input type="text" id="gh-repo" placeholder="username/repository-name">
+        <button class="btn-status" onclick="saveGitHubConfig()">Save Config &amp; Sync</button>
+        <div class="sync-note">
+          ⚠️ Your token is stored in this browser's local storage and sent directly from this page to GitHub's API —
+          there's no backend in between. Use a <strong>fine-grained token scoped only to this one repository</strong>
+          (not a classic token with full account access), and never paste a token into this page on a shared or public
+          computer.
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">1</div>
+        <h2>Monthly Progress Tracker</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Day</th>
+              <th>Workout Focus</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="reviews-table-body">
+            <!-- Dynamic rows populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer class="doc-footer">SOP-GYM-REV-01 · Daily Monthly Reviews</footer>
+  </main>
+
+  <main class="doc" id="doc-diet">
+    <div class="doc-header">
+      <span class="eyebrow">Standard Operating Procedure</span>
+      <h1>Junk-Free Meal Checklist</h1>
+      <p class="subtitle">5 meals a day — tick a box only if that meal had no sugar, maida, fried food, or packaged food
+      </p>
+      <div class="meta-grid">
+        <div>
+          <div class="m-label">DOCUMENT NO.</div>
+          <div class="m-value">SOP-GYM-DIET-01</div>
+        </div>
+        <div>
+          <div class="m-label">EFFECTIVE DATE</div>
+          <div class="m-value">21-Sep-2026</div>
+        </div>
+        <div>
+          <div class="m-label">REVISION</div>
+          <div class="m-value">1.0</div>
+        </div>
+        <div>
+          <div class="m-label">CYCLE LENGTH</div>
+          <div class="m-value">4 Weeks</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">i</div>
+        <h2>What Counts as “Junk”</h2>
+      </div>
+      <div class="tip">
+        <span>✖</span>
+        <span>
+          <b>No added Sugar</b> (sweets, sugary drinks, dessert, sweetened tea/coffee) &middot;
+          <b>No Maida / refined flour</b> (white bread, biscuits, bakery items, pasta made with maida) &middot;
+          <b>No Fried food</b> (deep-fried or heavily oily food) &middot;
+          <b>No Packaged / processed food</b> (chips, instant noodles, packaged snacks, ready-to-eat meals)
+        </span>
+      </div>
+      <p style="margin-top:10px;">Tick a box only when that entire meal was completely free of all four. Your ticks save
+        automatically in this browser as you tap them — no button to press, and nothing to type.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">1</div>
+        <h2>Week 1</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="diet-grid">
+          <thead>
+            <tr>
+              <th>Meal</th>
+              <th>Mon</th>
+              <th>Tue</th>
+              <th>Wed</th>
+              <th>Thu</th>
+              <th>Fri</th>
+              <th>Sat</th>
+              <th>Sun</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 1</span><span class="meal-name">Breakfast</span></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m1_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m1_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m1_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m1_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m1_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m1_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m1_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 2</span><span class="meal-name">Mid-Morning Snack</span>
+              </td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m2_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m2_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m2_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m2_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m2_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m2_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m2_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 3</span><span class="meal-name">Lunch</span></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m3_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m3_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m3_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m3_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m3_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m3_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m3_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 4</span><span class="meal-name">Evening Snack</span>
+              </td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m4_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m4_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m4_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m4_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m4_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m4_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m4_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 5</span><span class="meal-name">Dinner</span></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m5_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m5_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m5_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m5_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m5_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m5_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w1_m5_Sun"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">2</div>
+        <h2>Week 2</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="diet-grid">
+          <thead>
+            <tr>
+              <th>Meal</th>
+              <th>Mon</th>
+              <th>Tue</th>
+              <th>Wed</th>
+              <th>Thu</th>
+              <th>Fri</th>
+              <th>Sat</th>
+              <th>Sun</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 1</span><span class="meal-name">Breakfast</span></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m1_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m1_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m1_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m1_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m1_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m1_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m1_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 2</span><span class="meal-name">Mid-Morning Snack</span>
+              </td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m2_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m2_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m2_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m2_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m2_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m2_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m2_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 3</span><span class="meal-name">Lunch</span></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m3_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m3_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m3_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m3_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m3_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m3_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m3_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 4</span><span class="meal-name">Evening Snack</span>
+              </td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m4_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m4_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m4_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m4_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m4_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m4_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m4_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 5</span><span class="meal-name">Dinner</span></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m5_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m5_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m5_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m5_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m5_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m5_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w2_m5_Sun"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">3</div>
+        <h2>Week 3</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="diet-grid">
+          <thead>
+            <tr>
+              <th>Meal</th>
+              <th>Mon</th>
+              <th>Tue</th>
+              <th>Wed</th>
+              <th>Thu</th>
+              <th>Fri</th>
+              <th>Sat</th>
+              <th>Sun</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 1</span><span class="meal-name">Breakfast</span></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m1_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m1_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m1_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m1_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m1_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m1_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m1_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 2</span><span class="meal-name">Mid-Morning Snack</span>
+              </td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m2_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m2_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m2_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m2_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m2_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m2_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m2_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 3</span><span class="meal-name">Lunch</span></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m3_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m3_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m3_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m3_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m3_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m3_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m3_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 4</span><span class="meal-name">Evening Snack</span>
+              </td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m4_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m4_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m4_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m4_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m4_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m4_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m4_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 5</span><span class="meal-name">Dinner</span></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m5_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m5_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m5_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m5_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m5_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m5_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w3_m5_Sun"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <div class="num">4</div>
+        <h2>Week 4</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="diet-grid">
+          <thead>
+            <tr>
+              <th>Meal</th>
+              <th>Mon</th>
+              <th>Tue</th>
+              <th>Wed</th>
+              <th>Thu</th>
+              <th>Fri</th>
+              <th>Sat</th>
+              <th>Sun</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 1</span><span class="meal-name">Breakfast</span></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m1_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m1_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m1_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m1_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m1_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m1_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m1_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 2</span><span class="meal-name">Mid-Morning Snack</span>
+              </td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m2_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m2_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m2_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m2_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m2_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m2_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m2_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 3</span><span class="meal-name">Lunch</span></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m3_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m3_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m3_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m3_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m3_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m3_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m3_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 4</span><span class="meal-name">Evening Snack</span>
+              </td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m4_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m4_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m4_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m4_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m4_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m4_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m4_Sun"></td>
+            </tr>
+            <tr>
+              <td class="meal-cell"><span class="meal-num">Meal 5</span><span class="meal-name">Dinner</span></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m5_Mon"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m5_Tue"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m5_Wed"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m5_Thu"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m5_Fri"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m5_Sat"></td>
+              <td><input type="checkbox" class="chk-box" id="diet_w4_m5_Sun"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer class="doc-footer">SOP-GYM-DIET-01 · Junk-Free Meal Checklist — saved on this device only</footer>
+  </main>
+
+
+  <script>
+    /* ================= TAB SWITCHING ================= */
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.doc').forEach(d => d.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('doc-' + btn.dataset.doc).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      });
+    });
+
+    /* ================= PILL COLOR PALETTE ================= */
+    const palette = [
+      { bg: '#e6f4ea', fg: '#1f7a4d' },
+      { bg: '#e7f1fd', fg: '#1d6fd8' },
+      { bg: '#f2e8fb', fg: '#7a3fc9' },
+      { bg: '#fdeee0', fg: '#c9691a' },
+      { bg: '#fdeaea', fg: '#c62f2f' },
+      { bg: '#fff7d6', fg: '#a9780a' },
+      { bg: '#e4f7f5', fg: '#0f8f83' },
+      { bg: '#ece9fd', fg: '#5748c9' },
+    ];
+    function pillFor(i) { return palette[i % palette.length]; }
+
+    /* ================= HELPERS ================= */
+    function buildOrderTable(el, headers, rows, highlightLastRow) {
+      let thead = '<thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead>';
+      let tbody = '<tbody>' + rows.map((r, i) => {
+        const cls = (highlightLastRow && i === rows.length - 1) ? ' class="highlight"' : '';
+        return `<tr${cls}>` + r.map((c, ci) => {
+          const cellClass = ci === 0 ? 'num-cell' : (ci === 1 ? 'name-cell' : '');
+          return `<td class="${cellClass}">${c}</td>`;
+        }).join('') + '</tr>';
+      }).join('') + '</tbody>';
+      el.innerHTML = thead + tbody;
+    }
+
+    function buildCards(container, items) {
+      container.innerHTML = items.map((it, i) => {
+        const p = pillFor(i);
+        const steps = it.steps.map(s => `<li>${s}</li>`).join('');
+        const chips = it.rx.map(r => `<div class="rx-chip">${r.label}: <span>${r.value}</span></div>`).join('');
+        return `
+    <div class="ex-card">
+      <div class="ex-card-top">
+        <h3>${it.num ? it.num + '. ' : ''}${it.name}</h3>
+        <span class="pill" style="background:${p.bg};color:${p.fg}">${it.tag}</span>
+      </div>
+      <div class="ex-meta"><span><b>Target:</b> ${it.target}</span><span><b>Equipment:</b> ${it.equipment}</span></div>
+      <ol class="steps">${steps}</ol>
+      <div class="rx-row">${chips}</div>
+      <div class="tip"><span>💡</span><span><b>${it.tipLabel || 'Tip'}:</b> ${it.tip}</span></div>
+    </div>`;
+      }).join('');
+    }
+
+    /* ================= DOC 1 DATA — WARM-UP ================= */
+    buildOrderTable(document.getElementById('warmup-order-table'),
+      ['#', 'Exercise', 'Area Mobilised'],
+      [
+        ['A', 'General Pulse Raiser', 'Whole Body (heart rate &amp; blood flow)'],
+        ['1', 'Arm Circles', 'Shoulders'],
+        ['2', 'Torso Twists', 'Core / Obliques'],
+        ['3', 'Leg Swings (Front-to-Back)', 'Hips / Hamstrings'],
+        ['4', 'Leg Swings (Side-to-Side)', 'Hips / Adductors'],
+        ['5', 'Walking High Knees', 'Hip Flexors / Quads'],
+        ['6', 'Walking Lunges with Twist', 'Hips, Glutes &amp; Core'],
+        ['7', 'Butt Kicks', 'Quads / Hamstrings'],
+        ['8', 'Inchworm to Shoulder Roll', 'Hamstrings, Shoulders &amp; Core'],
+        ['9', 'Cat-Cow', 'Spine / Lower Back'],
+        ['10', 'Ankle Circles', 'Ankles'],
+      ]
+    );
+
+    buildCards(document.getElementById('warmup-phaseA'), [
+      {
+        name: 'General Pulse Raiser', tag: 'Whole Body',
+        target: 'Whole Body (heart rate & blood flow)',
+        equipment: 'Treadmill, stationary bike, rower, or open floor space',
+        steps: [
+          'Choose light cardio: brisk walk/jog on treadmill, cycling, or rowing.',
+          'Keep the intensity easy — you should be able to hold a conversation.',
+          'Gradually increase pace over the duration to raise heart rate and body temperature.',
+          'Finish with a light sweat and slightly elevated breathing rate.'
+        ],
+        rx: [{ label: 'Volume', value: '5–7 min continuous' }, { label: 'Rest', value: 'None — move into stretches' }],
+        tipLabel: 'Coaching Tip',
+        tip: 'This phase increases blood flow to muscles and joint lubrication before any stretching begins.'
+      }
+    ]);
+
+    buildCards(document.getElementById('warmup-phaseB'), [
+      {
+        num: 1, name: 'Arm Circles', tag: 'Shoulders', target: 'Shoulders', equipment: 'None / open floor space',
+        steps: ['Stand tall, feet shoulder-width apart, arms extended straight out to the sides.', 'Make small circles forward for the set duration, gradually increasing the size.', 'Reverse direction and repeat circling backward.', 'Keep your core braced and shoulders relaxed away from your ears.'],
+        rx: [{ label: 'Volume', value: '2 x 15 reps each direction' }, { label: 'Rest', value: 'None' }],
+        tipLabel: 'Coaching Tip', tip: 'Keep movements controlled — this mobilises the shoulder joint, it isn\'t a fast swing.'
+      },
+      {
+        num: 2, name: 'Torso Twists', tag: 'Core / Obliques', target: 'Core / Obliques', equipment: 'None / open floor space',
+        steps: ['Stand with feet shoulder-width apart, arms bent at 90° in front of your chest.', 'Rotate your torso to the right as far as comfortable, keeping hips facing forward.', 'Return to center and rotate to the left.', 'Keep the movement smooth and controlled, driven from the waist.'],
+        rx: [{ label: 'Volume', value: '2 x 12 reps/side' }, { label: 'Rest', value: 'None' }],
+        tipLabel: 'Coaching Tip', tip: 'Keep your hips relatively still — the twist should come from the spine, not the legs.'
+      },
+      {
+        num: 3, name: 'Leg Swings (Front-to-Back)', tag: 'Hips / Hamstrings', target: 'Hips / Hamstrings', equipment: 'None / open floor space',
+        steps: ['Stand next to a wall or machine for balance, hand resting lightly on it.', 'Swing one leg forward and backward in a controlled, pendulum-like motion.', 'Keep your torso upright and core engaged throughout.', 'Gradually increase the swing height as the hip loosens up.', 'Switch sides and repeat.'],
+        rx: [{ label: 'Volume', value: '2 x 12 reps/leg' }, { label: 'Rest', value: 'None' }],
+        tipLabel: 'Coaching Tip', tip: 'Avoid forcing the height of the swing — let the range of motion increase naturally.'
+      },
+      {
+        num: 4, name: 'Leg Swings (Side-to-Side)', tag: 'Hips / Adductors', target: 'Hips / Adductors', equipment: 'None / open floor space',
+        steps: ['Facing a wall or machine, place both hands on it for support.', 'Swing one leg out to the side and then across your body in a controlled arc.', 'Keep your standing leg slightly bent and torso stable.', 'Switch sides and repeat.'],
+        rx: [{ label: 'Volume', value: '2 x 12 reps/leg' }, { label: 'Rest', value: 'None' }],
+        tipLabel: 'Coaching Tip', tip: 'Keep the motion smooth — this opens up the hips and inner thigh before lower-body work.'
+      },
+      {
+        num: 5, name: 'Walking High Knees', tag: 'Hip Flexors / Quads', target: 'Hip Flexors / Quads', equipment: 'None / open floor space',
+        steps: ['Stand tall and walk forward, driving one knee up toward your chest at a time.', 'Pump your arms naturally as you would when walking or jogging.', 'Keep your chest up and land softly on the balls of your feet.', 'Continue for the set distance/duration, alternating legs each step.'],
+        rx: [{ label: 'Volume', value: '2 x 15–20m (or 20 sec)' }, { label: 'Rest', value: '20–30 sec' }],
+        tipLabel: 'Coaching Tip', tip: 'Focus on driving the knee up rather than speed — quality of movement over pace.'
+      },
+      {
+        num: 6, name: 'Walking Lunges with Twist', tag: 'Hips, Glutes & Core', target: 'Hips, Glutes & Core', equipment: 'None / open floor space',
+        steps: ['Step forward into a lunge, lowering your back knee toward the floor.', 'As you lunge, rotate your torso toward the front leg, arms out for balance.', 'Push through the front foot to stand and step into the next lunge.', 'Alternate legs, continuing forward for the set distance.'],
+        rx: [{ label: 'Volume', value: '2 x 8–10 lunges/leg' }, { label: 'Rest', value: '30 sec' }],
+        tipLabel: 'Coaching Tip', tip: 'Keep the front knee tracking over the ankle, not caving inward.'
+      },
+      {
+        num: 7, name: 'Butt Kicks', tag: 'Quads / Hamstrings', target: 'Quads / Hamstrings', equipment: 'None / open floor space',
+        steps: ['Jog lightly on the spot or moving forward.', 'Kick each heel up to touch (or move toward) your glutes as you jog.', 'Keep your knees pointing down, not forward, and stay light on your feet.', 'Continue for the set duration.'],
+        rx: [{ label: 'Volume', value: '2 x 20 sec' }, { label: 'Rest', value: '20–30 sec' }],
+        tipLabel: 'Coaching Tip', tip: 'Keep your torso upright and avoid leaning far forward or back.'
+      },
+      {
+        num: 8, name: 'Inchworm to Shoulder Roll', tag: 'Hamstrings, Shoulders & Core', target: 'Hamstrings, Shoulders & Core', equipment: 'None / open floor space',
+        steps: ['Stand tall, then hinge at the hips and walk your hands out to a plank position.', 'Hold briefly, then roll each shoulder in a full circle while in the plank.', 'Walk your hands back toward your feet, keeping legs as straight as comfortable.', 'Stand up tall to complete one rep.'],
+        rx: [{ label: 'Volume', value: '2 x 6–8 reps' }, { label: 'Rest', value: '30 sec' }],
+        tipLabel: 'Coaching Tip', tip: 'Bend the knees slightly if your hamstrings feel very tight — mobility, not maximal stretch, is the goal.'
+      },
+      {
+        num: 9, name: 'Cat-Cow', tag: 'Spine / Lower Back', target: 'Spine / Lower Back', equipment: 'None / open floor space',
+        steps: ['Start on hands and knees, wrists under shoulders, knees under hips.', 'Inhale, drop your belly and lift your chest and tailbone (Cow position).', 'Exhale, round your spine upward and tuck your chin (Cat position).', 'Flow smoothly between the two positions with your breath.'],
+        rx: [{ label: 'Volume', value: '2 x 10 reps' }, { label: 'Rest', value: 'None' }],
+        tipLabel: 'Coaching Tip', tip: 'Move slowly with your breath — this mobilises the entire spine before loading it.'
+      },
+      {
+        num: 10, name: 'Ankle Circles', tag: 'Ankles', target: 'Ankles', equipment: 'None / open floor space',
+        steps: ['Stand on one leg (holding support if needed) or sit on a bench.', 'Lift the other foot slightly off the ground.', 'Rotate the ankle in slow circles, 10 reps each direction.', 'Switch to the other ankle and repeat.'],
+        rx: [{ label: 'Volume', value: '1 x 10 reps each dir./side' }, { label: 'Rest', value: 'None' }],
+        tipLabel: 'Coaching Tip', tip: 'Small joint — small movement. This preps the ankles for calf raises and lunges.'
+      },
+    ]);
+
+    /* ================= DOC 2 DATA — WORKOUT ================= */
+    buildOrderTable(document.getElementById('workout-order-table'),
+      ['#', 'Exercise Name', 'Target Muscle Group', 'Required Equipment'],
+      [
+        ['1', 'Cable Tricep Pushdown', 'Triceps (Lateral & Medial Heads)', 'High Pulley / Straight Bar or Rope'],
+        ['2', 'Cable Bicep Curl', 'Biceps Brachii', 'Low Pulley / Straight Bar or Handles'],
+        ['3', 'Cable Crunch', 'Rectus Abdominis (Abs / Core)', 'High Pulley / Rope Attachment'],
+        ['4', 'Reverse-Grip Seated Cable Pulldown', 'Latissimus Dorsi / Lower Lats', 'High Pulley / Lat Bar'],
+        ['5', 'Seated Cable Row', 'Mid-Back (Rhomboids, Traps)', 'Low Pulley / V-Bar or Handles'],
+        ['6', 'Home Butterfly Machine / Pec Fly', 'Pectoralis Major (Chest)', 'Pec Deck / Butterfly Station'],
+        ['7', 'Leg Extension', 'Quadriceps (Front Thigh)', 'Leg Extension Bench/Attachment'],
+        ['8', 'Calf Raise', 'Gastrocnemius & Soleus (Calves)', 'Calf Platform / Cable Platform'],
+        ['9', 'Cable Lateral Raise', 'Lateral Deltoid (Shoulders)', 'Low Pulley / Single D-Handle'],
+        ['10', 'Side Leg Kick (Hip Abduction)', 'Gluteus Medius & Outer Thigh', 'Low Pulley / Ankle Strap'],
+        ['11', 'Back Kick (Glute Kickback)', 'Gluteus Maximus', 'Low Pulley / Ankle Strap'],
+        ['12', 'Strap Wrist Curl (No Bar)', 'Forearms (Wrist Flexors)', 'Low Pulley / Soft Strap Handle'],
+        ['13', 'Cable Hamstring Curl', 'Hamstrings (Back of Thigh)', 'Low Pulley / Ankle Strap'],
+      ],
+      true
+    );
+
+    buildCards(document.getElementById('workout-cards'), [
+      {
+        num: 1, name: 'Cable Tricep Pushdown', tag: 'Arm Extension', target: 'Triceps (Back of Upper Arm)', equipment: 'High Pulley + Bar/Rope',
+        steps: ['Attach a straight bar or rope to the high pulley station.', 'Stand upright facing the pulley, feet shoulder-width apart, with a slight forward torso pitch.', 'Grip the handle overhand, lock upper arms tightly against your ribcage.', 'Extend arms downward by contracting the triceps until elbows fully straighten.', 'Pause for 1 second at the bottom, squeezing the triceps forcefully.', 'Slowly allow the bar to ascend back to approximately 90° elbow bend.'],
+        rx: [{ label: 'Sets x Reps', value: '3 x 12–15' }, { label: 'Rest', value: '45–60 sec' }],
+        tipLabel: 'Form Tip', tip: 'Keep elbows pinned in place. Do not let elbows flare outward or drift forward during reps.'
+      },
+      {
+        num: 2, name: 'Cable Bicep Curl', tag: 'Arm Flexion', target: 'Biceps Brachii', equipment: 'Low Pulley + Straight/EZ Bar',
+        steps: ['Attach a bar attachment to the lower pulley line.', 'Stand upright facing the cable unit with core fully engaged and chest tall.', 'Grip the bar with an underhand (palms up) grip at shoulder width.', 'Flex elbows to curl the bar upward toward chest level while keeping upper arms fixed.', 'Squeeze biceps forcefully at peak elevation for 1 second.', 'Lower the attachment slowly back down under full muscular tension.'],
+        rx: [{ label: 'Sets x Reps', value: '3 x 12–15' }, { label: 'Rest', value: '45–60 sec' }],
+        tipLabel: 'Form Tip', tip: 'Prevent body sway or swinging. If torso leans back, lower the weight stack selection.'
+      },
+      {
+        num: 3, name: 'Cable Crunch', tag: 'Core / Abdominals', target: 'Rectus Abdominis', equipment: 'High Pulley + Rope Attachment',
+        steps: ['Attach a soft rope to the upper cable stack and kneel 2–3 feet back.', 'Hold the rope ends firmly placed adjacent to your ears or temples.', 'Keep your hips locked over your knees — do not sit back on your heels during the movement.', 'Contract abdominal muscles to curl spine downward, driving elbows toward thighs.', 'Exhale fully and hold peak abdominal contraction for 1 second at the bottom.', 'Uncurl upper torso smoothly under tension back to starting position.'],
+        rx: [{ label: 'Sets x Reps', value: '3 x 15–20' }, { label: 'Rest', value: '30–45 sec' }],
+        tipLabel: 'Form Tip', tip: 'Flex through the spine, not the hip joints. Arms should move purely with the torso.'
+      },
+      {
+        num: 4, name: 'Reverse-Grip Seated Cable Pulldown', tag: 'Upper Vertical Pull', target: 'Latissimus Dorsi & Lower Lats', equipment: 'High Pulley + Lat Bar',
+        steps: ['Adjust knee pads tightly on the pulldown station to anchor lower body securely.', 'Grip lat bar with a reverse underhand (supinated) grip at shoulder width.', 'Sit tall with chest lifted up toward the bar and a minor natural spinal arch.', 'Pull bar straight down to touch upper chest, concentrating on drawing elbows back.', 'Contract lats and squeeze shoulder blades together at the bottom position.', 'Control weight upward until arms reach full overhead extension.'],
+        rx: [{ label: 'Sets x Reps', value: '3 x 10–12' }, { label: 'Rest', value: '60 sec' }],
+        tipLabel: 'Form Tip', tip: 'Supinated grip increases lower lat activation; avoid excessive backward leaning.'
+      },
+      {
+        num: 5, name: 'Seated Cable Row', tag: 'Horizontal Mid-Back Pull', target: 'Mid-Back (Rhomboids, Lats, Traps)', equipment: 'Low Pulley + V-Bar / Handles',
+        steps: ['Sit on bench with feet planted on footplates, knees slightly flexed (unlocked).', 'Grip V-bar handle and sit up completely upright with chest puffed out.', 'Initiate pull by driving elbows straight back, pulling handle toward lower waist.', 'Pinch shoulder blades together tightly at maximum contraction point.', 'Pause briefly, then extend arms forward under full control.', 'Allow light forward shoulder stretch without rounding back before next rep.'],
+        rx: [{ label: 'Sets x Reps', value: '3 x 12' }, { label: 'Rest', value: '60 sec' }],
+        tipLabel: 'Form Tip', tip: 'Keep torso static; do not rock back and forth to carry weight via momentum.'
+      },
+      {
+        num: 6, name: 'Home Butterfly Machine / Pec Fly', tag: 'Chest Isolation', target: 'Pectoralis Major (Chest)', equipment: 'Pec Deck / Butterfly Station',
+        steps: ['Adjust seat height so vertical handle pads align evenly with mid-chest level.', 'Sit firmly with upper back and head resting against back pad.', 'Place forearms against pads or hold handles with soft bend in elbows.', 'Bring both handles together across center in a wide, sweeping arc.', 'Contract chest muscles firmly at center point for 1 full second.', 'Return arms backward slowly until feeling a comfortable stretch across pectoral chest.'],
+        rx: [{ label: 'Sets x Reps', value: '3 x 12–15' }, { label: 'Rest', value: '45–60 sec' }],
+        tipLabel: 'Form Tip', tip: 'Maintain consistent elbow angle throughout movement. Focus entirely on chest drive.'
+      },
+      {
+        num: 7, name: 'Leg Extension', tag: 'Quad Isolation', target: 'Quadriceps (Front Thigh)', equipment: 'Leg Extension Bench/Attachment',
+        steps: ['Sit on bench, aligning knee joint directly with machine rotation pivot axis.', 'Place lower shins snugly behind padded roller; grasp side handles tightly.', 'Extend legs upward smoothly until fully straightened.', 'Contract quadriceps forcefully at peak extension for 1 second.', 'Lower weight slowly under tension back to starting 90° angle.', 'Maintain hip contact with seat back throughout execution.'],
+        rx: [{ label: 'Sets x Reps', value: '3 x 12–15' }, { label: 'Rest', value: '45–60 sec' }],
+        tipLabel: 'Form Tip', tip: 'Avoid kicking dynamically at bottom. Keep reps controlled and deliberate.'
+      },
+      {
+        num: 8, name: 'Calf Raise', tag: 'Lower Leg', target: 'Gastrocnemius & Soleus', equipment: 'Calf Platform / Cable Board',
+        steps: ['Place balls of feet onto platform edge with heels suspended off back edge.', 'Lower heels downward as far as possible for deep calf stretch.', 'Push through balls of feet to raise heels up into peak contraction.', 'Hold tiptoe position for 1 second, squeezing lower leg muscles.', 'Lower back down smoothly to full bottom stretch position.', 'Repeat for full target repetition range.'],
+        rx: [{ label: 'Sets x Reps', value: '3–4 x 15–20' }, { label: 'Rest', value: '30–45 sec' }],
+        tipLabel: 'Form Tip', tip: 'Avoid fast bouncing rep cadences. Emphasize full stretch and full contraction.'
+      },
+      {
+        num: 9, name: 'Cable Lateral Raise', tag: 'Shoulders', target: 'Lateral Deltoid (Side Shoulder)', equipment: 'Low Pulley + Single D-Handle',
+        steps: ['Stand side-facing relative to low pulley unit; grip handle with outside arm.', 'Position arm across waist in starting lowered position.', 'Raise arm out to side until reaching parallel shoulder height.', 'Pause briefly at peak shoulder elevation.', 'Lower handle across body back to starting point with constant control.', 'Complete set on first side before swapping stance to work opposite shoulder.'],
+        rx: [{ label: 'Sets x Reps', value: '3 x 12–15 / side' }, { label: 'Rest', value: '30–45 sec' }],
+        tipLabel: 'Form Tip', tip: 'Lead motion with elbow joint rather than hand to maximize deltoid tension.'
+      },
+      {
+        num: 10, name: 'Side Leg Kick (Hip Abduction)', tag: 'Outer Hip & Glute', target: 'Gluteus Medius / Hip Abductors', equipment: 'Low Pulley / Band + Ankle Strap',
+        steps: ['Secure ankle strap onto working leg and connect attachment to low pulley.', 'Stand sideways to machine, holding frame or bench for lateral stability.', 'Keeping working leg straight, sweep leg outward to side away from body center.', 'Pause at top height, squeezing gluteus medius for 1 second.', 'Lower leg smoothly back across front of standing foot.', 'Perform all prescribed reps on one leg before switching sides.'],
+        rx: [{ label: 'Sets x Reps', value: '3 x 12–15 / side' }, { label: 'Rest', value: '45 sec' }],
+        tipLabel: 'Form Tip', tip: 'Keep upper spine vertical — do not tilt upper body sideways to swing leg.'
+      },
+      {
+        num: 11, name: 'Back Kick (Glute Kickback)', tag: 'Posterior Chain', target: 'Gluteus Maximus', equipment: 'Low Pulley / Band + Ankle Strap',
+        steps: ['Maintain ankle strap on working leg and face directly toward cable tower.', 'Hinge slightly forward at hips (~20°) while holding frame handles.', 'Drive working leg directly backward in straight line, squeezing glute tightly.', 'Hold extended back position for 1 full second without arching lower back.', 'Control leg forward back to starting position.', 'Complete target rep count, then alternate to opposite leg.'],
+        rx: [{ label: 'Sets x Reps', value: '3 x 12–15 / side' }, { label: 'Rest', value: '45 sec' }],
+        tipLabel: 'Form Tip', tip: 'Focus movement strictly at hip joint; do not hyperextend lumbar spine.'
+      },
+      {
+        num: 12, name: 'Strap Wrist Curl (No Bar)', tag: 'Forearm Flexion', target: 'Forearms (Wrist Flexors)', equipment: 'Low Pulley + Soft Strap Handle',
+        steps: ['Attach soft fabric strap handle to lower pulley line.', 'Kneel or sit, resting forearms across thighs with wrists extending past knees, palms facing up.', 'Grip soft fabric strap handle using underhand grip.', 'Flex wrists upward, curling strap up toward forearms using only wrist joint action.', 'Squeeze forearm muscles hard at peak contraction point.', 'Lower strap slowly down to full extension position.'],
+        rx: [{ label: 'Sets x Reps', value: '3 x 15–20' }, { label: 'Rest', value: '30–45 sec' }],
+        tipLabel: 'Form Tip', tip: 'Soft strap provides continuous natural wrist rotation; keep forearms glued to thighs.'
+      },
+      {
+        num: 13, name: 'Cable Hamstring Curl', tag: 'Hamstring Isolation', target: 'Hamstrings (Biceps Femoris, Semitendinosus)', equipment: 'Low pulley cable station / band with ankle strap',
+        steps: ['Wrap the padded ankle strap securely around your working leg\'s ankle and hook carabiner to the low pulley cable line.', 'Stand facing directly toward the cable tower (or lay prone on a flat bench adjacent to pulley) holding frame uprights for balance.', 'Keeping your upper thigh aligned with your standing leg, flex your knee to draw your heel smoothly up toward your glute.', 'Curl upward until maximum comfortable knee flexion is achieved, squeezing the hamstring muscle forcefully for 1 full second at peak height.', 'Slowly lower your foot back down under full muscular tension to near full leg extension without letting weight stack touch down.', 'Complete the full prescribed rep volume on primary leg, unhook carabiner, and repeat execution on opposite leg.'],
+        rx: [{ label: 'Sets x Reps', value: '3 x 12–15 / side' }, { label: 'Rest', value: '45–60 sec' }],
+        tipLabel: 'Form Tip', tip: 'Keep thighs aligned and move strictly at the knee joint; avoid swinging the hip or arching the lower back.'
+      },
+    ]);
+
+    /* ================= DOC 3 DATA — COOL-DOWN ================= */
+    buildOrderTable(document.getElementById('cooldown-order-table'),
+      ['#', 'Stretch', 'Target', 'Used On'],
+      [
+        ['1', 'Doorway Chest Stretch', 'Chest (pectorals)', 'Day 1 — Chest'],
+        ['2', 'Cross-Body Shoulder Stretch', 'Shoulders (rear/side deltoid)', 'Day 1 Chest, Day 4 Shoulders'],
+        ['3', 'Cobra Stretch', 'Abs / Front Torso', 'Day 2 — Abs & Core'],
+        ['4', 'Seated Torso Rotation Stretch', 'Obliques / Core', 'Day 2 — Abs & Core'],
+        ['5', 'Standing Quad Stretch', 'Quadriceps (front of thigh)', 'Day 3 — Legs & Buttocks'],
+        ['6', 'Seated Hamstring Stretch', 'Hamstrings (back of thigh)', 'Day 3 — Legs & Buttocks'],
+        ['7', 'Figure-4 Glute Stretch', 'Glutes', 'Day 3 — Legs & Buttocks'],
+        ['8', 'Calf Wall Stretch', 'Calves', 'Day 3 — Legs & Buttocks'],
+        ['9', 'Overhead Triceps Stretch', 'Triceps', 'Day 4 Shoulders, Day 5 Arms'],
+        ['10', 'Biceps Wall Stretch', 'Biceps', 'Day 5 — Arms'],
+        ['11', 'Wrist Flexor / Extensor Stretch', 'Forearms & Wrists', 'Day 5 — Arms'],
+        ['12', "Child's Pose", 'Lower Back / Lats', 'Day 6 — Back'],
+        ['13', 'Overhead Lat Side-Stretch', 'Lats / Obliques', 'Day 6 — Back'],
+        ['14', 'Thread the Needle Stretch', 'Upper Back / Thoracic Spine', 'Day 1 — Chest'],
+        ['15', 'Knee-to-Chest Stretch', 'Lower Back', 'Day 2 — Abs & Core'],
+      ]
+    );
+
+    buildCards(document.getElementById('cooldown-cards'), [
+      {
+        num: 1, name: 'Doorway Chest Stretch', tag: 'Chest', target: 'Chest (pectorals)', equipment: 'Doorway',
+        steps: ['Stand in a doorway and raise one arm to the side, elbow bent ~90 degrees.', 'Place your forearm and palm flat against the door frame.', 'Step forward through the doorway with the same-side leg until you feel a stretch across the chest and front shoulder.', 'Keep your torso upright — don\'t let your lower back arch.', 'Hold, then switch sides.'],
+        rx: [{ label: 'Hold', value: '25–30 sec x 2 per side' }],
+        tip: 'Move slowly into the stretch and stop as soon as you feel gentle tension — never sharp pain.'
+      },
+      {
+        num: 2, name: 'Cross-Body Shoulder Stretch', tag: 'Shoulders', target: 'Shoulders (rear/side deltoid)', equipment: 'None',
+        steps: ['Stand or sit tall with a relaxed posture.', 'Bring one arm straight across your chest at shoulder height.', 'Use your opposite hand/forearm to gently pull the arm closer to your body.', 'Keep the shoulder of the stretching arm relaxed, away from your ear.', 'Hold, then switch arms.'],
+        rx: [{ label: 'Hold', value: '20–25 sec per side' }],
+        tip: 'Pull from the upper arm, not the wrist or hand, to avoid straining the elbow.'
+      },
+      {
+        num: 3, name: 'Cobra Stretch', tag: 'Abs / Front Torso', target: 'Abs / Front Torso', equipment: 'Mat',
+        steps: ['Lie face down on a mat, palms flat on the floor under your shoulders.', 'Keep your hips and legs relaxed on the floor.', 'Press through your palms to gently lift your chest up, extending the spine.', 'Keep your elbows slightly bent — don\'t fully lock them out.', 'Hold, then lower back down with control.'],
+        rx: [{ label: 'Hold', value: '20–25 sec x 2' }],
+        tip: 'Lift only as high as feels comfortable — this is a gentle extension, not a deep backbend.'
+      },
+      {
+        num: 4, name: 'Seated Torso Rotation Stretch', tag: 'Obliques / Core', target: 'Obliques / Core', equipment: 'Floor or bench',
+        steps: ['Sit tall on the floor or a bench with knees bent, feet flat.', 'Place one hand behind you on the floor/bench for support.', 'Bring the opposite hand to the outside of the opposite knee.', 'Gently rotate your torso toward the supporting hand.', 'Hold, then switch sides.'],
+        rx: [{ label: 'Hold', value: '20 sec per side' }],
+        tip: 'Rotate from the ribcage, keeping your spine tall rather than slumping forward.'
+      },
+      {
+        num: 5, name: 'Standing Quad Stretch', tag: 'Quadriceps', target: 'Quadriceps (front of thigh)', equipment: 'Wall / machine for balance',
+        steps: ['Stand tall, holding onto a wall or machine for balance if needed.', 'Bend one knee and grab your ankle or foot behind you.', 'Gently pull your heel toward your glutes, keeping your knees close together.', 'Keep your torso upright and hips pushed slightly forward.', 'Hold, then switch legs.'],
+        rx: [{ label: 'Hold', value: '20–25 sec per side' }],
+        tip: 'Avoid arching your lower back — keep your core braced throughout.'
+      },
+      {
+        num: 6, name: 'Seated Hamstring Stretch', tag: 'Hamstrings', target: 'Hamstrings (back of thigh)', equipment: 'Floor or bench',
+        steps: ['Sit on the floor or a bench with one leg extended straight out.', 'Bend the other knee, foot resting against the inner thigh.', 'Keeping your back straight, hinge forward from the hips toward your extended foot.', 'Reach toward your toes until you feel a stretch behind the thigh.', 'Hold, then switch legs.'],
+        rx: [{ label: 'Hold', value: '20–25 sec per side' }],
+        tip: 'Hinge from the hips, not by rounding your upper back.'
+      },
+      {
+        num: 7, name: 'Figure-4 Glute Stretch', tag: 'Glutes', target: 'Glutes', equipment: 'Mat / floor',
+        steps: ['Lie on your back with both knees bent, feet flat on the floor.', 'Cross one ankle over the opposite knee, forming a \'4\' shape.', 'Reach through and clasp your hands behind the thigh of the uncrossed leg.', 'Gently pull that leg toward your chest until you feel a stretch in the glute.', 'Hold, then switch sides.'],
+        rx: [{ label: 'Hold', value: '20–25 sec per side' }],
+        tip: 'Keep your head and shoulders relaxed on the floor throughout.'
+      },
+      {
+        num: 8, name: 'Calf Wall Stretch', tag: 'Calves', target: 'Calves', equipment: 'Wall',
+        steps: ['Face a wall and place both hands on it at shoulder height.', 'Step one foot back, keeping that leg straight and heel flat on the floor.', 'Bend your front knee and lean into the wall until you feel a stretch in the back calf.', 'Keep the back foot pointed straight ahead, not turned outward.', 'Hold, then switch legs.'],
+        rx: [{ label: 'Hold', value: '20–25 sec per side' }],
+        tip: 'Keep the back heel pressed firmly into the floor throughout the stretch.'
+      },
+      {
+        num: 9, name: 'Overhead Triceps Stretch', tag: 'Triceps', target: 'Triceps', equipment: 'None',
+        steps: ['Stand or sit tall and raise one arm straight overhead.', 'Bend that elbow so your hand drops behind your head/neck.', 'Use your opposite hand to gently press down on the bent elbow.', 'Keep your torso upright, avoiding leaning to one side.', 'Hold, then switch arms.'],
+        rx: [{ label: 'Hold', value: '20–25 sec per side' }],
+        tip: 'Press the elbow down gently — do not force the stretch or yank on the arm.'
+      },
+      {
+        num: 10, name: 'Biceps Wall Stretch', tag: 'Biceps', target: 'Biceps', equipment: 'Wall',
+        steps: ['Stand side-on next to a wall, arm straight, palm flat against the wall behind you.', 'Keep your arm at about shoulder height, fingers pointing backward.', 'Slowly rotate your torso away from the wall until you feel a stretch along the front of the upper arm.', 'Keep your elbow straight but not locked forcefully.', 'Hold, then switch arms.'],
+        rx: [{ label: 'Hold', value: '20–25 sec per side' }],
+        tip: 'Rotate gradually — stop as soon as you feel a mild stretch, not a pulling pain.'
+      },
+      {
+        num: 11, name: 'Wrist Flexor / Extensor Stretch', tag: 'Forearms & Wrists', target: 'Forearms & Wrists', equipment: 'None',
+        steps: ['Extend one arm straight in front of you, palm facing up.', 'With your other hand, gently pull the fingers back toward your body to stretch the underside of the forearm.', 'Hold, then turn the palm to face down.', 'Gently pull the hand downward/inward to stretch the top of the forearm.', 'Hold, then switch arms.'],
+        rx: [{ label: 'Hold', value: '15–20 sec per position, per side' }],
+        tip: 'These are small muscles — use gentle pressure only, especially after wrist curls.'
+      },
+      {
+        num: 12, name: "Child's Pose", tag: 'Lower Back / Lats', target: 'Lower Back / Lats', equipment: 'Mat',
+        steps: ['Kneel on a mat with big toes touching and knees spread comfortably wide.', 'Sit your hips back toward your heels.', 'Walk your hands forward and lower your chest toward the floor.', 'Let your forehead rest on the mat, arms extended in front of you.', 'Breathe deeply and relax into the stretch.'],
+        rx: [{ label: 'Hold', value: '25–30 sec' }],
+        tip: 'Widen your knees further if you feel any pinching in the lower back.'
+      },
+      {
+        num: 13, name: 'Overhead Lat Side-Stretch', tag: 'Lats / Obliques', target: 'Lats / Obliques', equipment: 'None',
+        steps: ['Stand tall, feet hip-width apart.', 'Raise both arms overhead and clasp your hands together.', 'Gently lean your torso to one side from the waist, keeping hips facing forward.', 'Feel the stretch along your side body and lat.', 'Return to center, then lean to the other side.'],
+        rx: [{ label: 'Hold', value: '20–25 sec per side' }],
+        tip: 'Keep the stretch in a straight side-bend — avoid leaning forward or twisting.'
+      },
+      {
+        num: 14, name: 'Thread the Needle Stretch', tag: 'Upper Back', target: 'Upper Back / Thoracic Spine', equipment: 'Mat / Floor',
+        steps: ['Start on all fours (hands under shoulders, knees under hips).', 'Slide one arm underneath your body, palm up, until your shoulder and ear rest on the floor.', 'Let your torso rotate naturally toward the floor as you thread the arm through.', 'Keep your hips stacked over your knees — don\'t let them shift sideways.', 'Hold, then unwind slowly and switch sides.'],
+        rx: [{ label: 'Hold', value: '25–30 sec per side' }],
+        tip: 'This rotates and opens the upper back/thoracic spine — the area chest presses tend to stiffen. Move into it slowly, no forcing the rotation.'
+      },
+      {
+        num: 15, name: 'Knee-to-Chest Stretch', tag: 'Lower Back', target: 'Lower Back', equipment: 'Mat / Floor',
+        steps: ['Lie on your back with both legs extended.', 'Bring one knee up toward your chest, clasping your hands behind the thigh or shin.', 'Gently pull the knee closer while keeping your lower back and head relaxed on the floor.', 'Keep the opposite leg extended and relaxed on the floor.', 'Hold, then switch legs (or bring both knees in together for a fuller stretch).'],
+        rx: [{ label: 'Hold', value: '30 sec, both sides' }],
+        tip: 'This gently decompresses the lower back after crunches — a good pairing with the Superman Hold, which works the same area in the opposite direction.'
+      },
+    ]);
+
+    /* ================= REVIEWS TAB (Daily Monthly Reviews) ================= */
+    const reviewData = [
+      { id: 1, date: '14-Sep', day: 'Mon', focus: 'Monday — Chest' },
+      { id: 2, date: '15-Sep', day: 'Tue', focus: 'Tuesday — Abs & Core' },
+      { id: 3, date: '16-Sep', day: 'Wed', focus: 'Wednesday — Legs & Glutes' },
+      { id: 4, date: '17-Sep', day: 'Thu', focus: 'Thursday — Shoulders' },
+      { id: 5, date: '18-Sep', day: 'Fri', focus: 'Friday — Arms' },
+      { id: 6, date: '19-Sep', day: 'Sat', focus: 'Saturday — Back' },
+      { id: 7, date: '20-Sep', day: 'Sun', focus: 'Sunday — Rest Day' },
+      { id: 8, date: '21-Sep', day: 'Mon', focus: 'Monday — Chest' },
+      { id: 9, date: '22-Sep', day: 'Tue', focus: 'Tuesday — Abs & Core' },
+      { id: 10, date: '23-Sep', day: 'Wed', focus: 'Wednesday — Legs & Glutes' },
+      { id: 11, date: '24-Sep', day: 'Thu', focus: 'Thursday — Shoulders' },
+      { id: 12, date: '25-Sep', day: 'Fri', focus: 'Friday — Arms' },
+      { id: 13, date: '26-Sep', day: 'Sat', focus: 'Saturday — Back' },
+      { id: 14, date: '27-Sep', day: 'Sun', focus: 'Sunday — Rest Day' },
+      { id: 15, date: '28-Sep', day: 'Mon', focus: 'Monday — Chest' },
+      { id: 16, date: '29-Sep', day: 'Tue', focus: 'Tuesday — Abs & Core' },
+      { id: 17, date: '30-Sep', day: 'Wed', focus: 'Wednesday — Legs & Glutes' },
+      { id: 18, date: '01-Oct', day: 'Thu', focus: 'Thursday — Shoulders' },
+      { id: 19, date: '02-Oct', day: 'Fri', focus: 'Friday — Arms' },
+      { id: 20, date: '03-Oct', day: 'Sat', focus: 'Saturday — Back' },
+      { id: 21, date: '04-Oct', day: 'Sun', focus: 'Sunday — Rest Day' },
+      { id: 22, date: '05-Oct', day: 'Mon', focus: 'Monday — Chest' },
+      { id: 23, date: '06-Oct', day: 'Tue', focus: 'Tuesday — Abs & Core' },
+      { id: 24, date: '07-Oct', day: 'Wed', focus: 'Wednesday — Legs & Glutes' },
+      { id: 25, date: '08-Oct', day: 'Thu', focus: 'Thursday — Shoulders' },
+      { id: 26, date: '09-Oct', day: 'Fri', focus: 'Friday — Arms' },
+      { id: 27, date: '10-Oct', day: 'Sat', focus: 'Saturday — Back' },
+      { id: 28, date: '11-Oct', day: 'Sun', focus: 'Sunday — Rest Day' },
+      { id: 29, date: '12-Oct', day: 'Mon', focus: 'Monday — Chest' },
+      { id: 30, date: '13-Oct', day: 'Tue', focus: 'Tuesday — Abs & Core' },
+      { id: 31, date: '14-Oct', day: 'Wed', focus: 'Wednesday — Legs & Glutes' }
+    ];
+
+    let userStatuses = JSON.parse(localStorage.getItem('review_statuses')) || {};
+
+    function renderReviewTable() {
+      const tbody = document.getElementById('reviews-table-body');
+      if (!tbody) return;
+      let doneCount = 0;
+
+      tbody.innerHTML = reviewData.map(item => {
+        const currentStatus = userStatuses[item.id] || '';
+        if (currentStatus === 'Done') doneCount++;
+        return `
+      <tr>
+        <td class="num-cell">${item.id}</td>
+        <td>${item.date}</td>
+        <td>${item.day}</td>
+        <td class="name-cell">${item.focus}</td>
+        <td>
+          <div class="status-btn-group">
+            <button class="btn-status ${currentStatus === 'Done' ? 'active-done' : ''}" onclick="setStatus(${item.id}, 'Done')">Done</button>
+            <button class="btn-status ${currentStatus === 'Pending' ? 'active-pending' : ''}" onclick="setStatus(${item.id}, 'Pending')">Pending</button>
+            <button class="btn-status ${currentStatus === 'Not Done' ? 'active-notdone' : ''}" onclick="setStatus(${item.id}, 'Not Done')">Not Done</button>
+          </div>
+        </td>
+      </tr>`;
+      }).join('');
+
+      const rate = Math.round((doneCount / reviewData.length) * 100);
+      const rateEl = document.getElementById('adherence-rate');
+      if (rateEl) rateEl.innerText = rate + '%';
+    }
+
+    function setStatus(id, status) {
+      userStatuses[id] = status;
+      localStorage.setItem('review_statuses', JSON.stringify(userStatuses));
+      renderReviewTable();
+      syncToGitHub();
+    }
+
+    /* GitHub JSON Sync (client-side only, no backend — see security note in the tab) */
+    function saveGitHubConfig() {
+      const token = document.getElementById('gh-token').value;
+      const repo = document.getElementById('gh-repo').value;
+      localStorage.setItem('gh_token', token);
+      localStorage.setItem('gh_repo', repo);
+      alert('GitHub configuration saved!');
+      fetchFromGitHub();
+    }
+
+    async function syncToGitHub() {
+      const token = localStorage.getItem('gh_token');
+      const repo = localStorage.getItem('gh_repo');
+      if (!token || !repo) return;
+
+      const statusEl = document.getElementById('sync-status');
+      if (statusEl) statusEl.innerText = 'Syncing...';
+      const url = `https://api.github.com/repos/${repo}/contents/tracker-data.json`;
+
+      try {
+        let sha = '';
+        const getRes = await fetch(url, { headers: { 'Authorization': `token ${token}` } });
+        if (getRes.ok) {
+          const fileData = await getRes.json();
+          sha = fileData.sha;
+        }
+        const content = btoa(JSON.stringify(userStatuses, null, 2));
+        const putRes = await fetch(url, {
+          method: 'PUT',
+          headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: 'Update tracker status via web UI',
+            content: content,
+            sha: sha || undefined
+          })
+        });
+        if (statusEl) statusEl.innerText = putRes.ok ? 'Synced to GitHub' : 'Sync Failed';
+      } catch (err) {
+        if (statusEl) statusEl.innerText = 'Sync Error';
+      }
+    }
+
+    async function fetchFromGitHub() {
+      const token = localStorage.getItem('gh_token');
+      const repo = localStorage.getItem('gh_repo');
+      if (!token || !repo) return;
+
+      const url = `https://api.github.com/repos/${repo}/contents/tracker-data.json`;
+      try {
+        const res = await fetch(url, { headers: { 'Authorization': `token ${token}` } });
+        if (res.ok) {
+          const fileData = await res.json();
+          userStatuses = JSON.parse(atob(fileData.content));
+          localStorage.setItem('review_statuses', JSON.stringify(userStatuses));
+          renderReviewTable();
+          const statusEl = document.getElementById('sync-status');
+          if (statusEl) statusEl.innerText = 'Synced from GitHub';
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const tokenEl = document.getElementById('gh-token');
+      const repoEl = document.getElementById('gh-repo');
+      if (tokenEl && localStorage.getItem('gh_token')) tokenEl.value = localStorage.getItem('gh_token');
+      if (repoEl && localStorage.getItem('gh_repo')) repoEl.value = localStorage.getItem('gh_repo');
+      renderReviewTable();
+      fetchFromGitHub();
+    });
+
+    /* ================= DIET CHECKLIST (namespaced diet*, auto-saves via localStorage) ================= */
+    const DIET_STORAGE_KEY = 'diet_checklist_v1';
+
+    function dietLoadAll() {
+      let saved = {};
+      try {
+        saved = JSON.parse(localStorage.getItem(DIET_STORAGE_KEY)) || {};
+      } catch (e) {
+        saved = {};
+      }
+      document.querySelectorAll('#doc-diet input.chk-box').forEach(box => {
+        if (saved[box.id]) box.checked = true;
+      });
+    }
+
+    function dietSaveAll() {
+      const data = {};
+      document.querySelectorAll('#doc-diet input.chk-box').forEach(box => {
+        if (box.checked) data[box.id] = true;
+      });
+      try {
+        localStorage.setItem(DIET_STORAGE_KEY, JSON.stringify(data));
+      } catch (e) {
+        console.error('Diet checklist save failed', e);
+      }
+    }
+
+    document.addEventListener('change', (e) => {
+      if (e.target && e.target.classList && e.target.classList.contains('chk-box') && e.target.closest('#doc-diet')) {
+        dietSaveAll();
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', dietLoadAll);
+  </script>
+</body>
+
+</html>
